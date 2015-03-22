@@ -267,6 +267,8 @@ $(BINDIR)/bossac$(EXE): $(BOSSAC_OBJS) | $(BINDIR)
 	$(Q)$(CXX) $(BOSSAC_LDFLAGS) -o $@ $(BOSSAC_OBJS) $(BOSSAC_LIBS)
 
 $(BOSSASH_OBJS): | $(OBJDIR)
+bossac : $(BINDIR)/bossac$(EXE)
+
 $(BINDIR)/bossash$(EXE): $(BOSSASH_OBJS) | $(BINDIR)
 	@echo LD $@
 	$(Q)$(CXX) $(BOSSASH_LDFLAGS) -o $@ $(BOSSASH_OBJS) $(BOSSASH_LIBS)
