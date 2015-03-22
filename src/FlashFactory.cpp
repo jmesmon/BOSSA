@@ -166,6 +166,7 @@ FlashFactory::create(Samba& samba, uint32_t chipId)
     case 0x28aa0760 : // C
         flash = new EefcFlash(samba, "ATSAM3S2", 0x400000, 512, 256, 1, 8, 0x20000800, 0x20008000, 0x400e0a00, false);
         break;
+    case 0x28890560 : // flutter
     case 0x288a0560 : // A
     case 0x289a0560 : // B
     case 0x28aa0560 : // C
