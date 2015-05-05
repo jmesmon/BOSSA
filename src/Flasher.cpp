@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <iostream>
 
 #include "Flasher.h"
 
@@ -98,7 +99,7 @@ Flasher::write(const char* filename)
         while ((fbytes = fread(buffer, 1, pageSize, infile)) > 0)
         {
             // updated from one print per 10 pages to one per 10 percent
-            if (pageNum % (numPages/10) == 0)
+            if (!(numPages / 10) || (pageNum % (numPages/10) == 0))
                 progressBar(pageNum, numPages);
 
             _flash->loadBuffer(buffer, fbytes);
@@ -111,8 +112,9 @@ Flasher::write(const char* filename)
         progressBar(pageNum, numPages);
         printf("\n");
     }
-    catch(...)
+    catch(const std::exception &e)
     {
+        std::cerr << "Error handling file: " << e.what() << std::endl;
         fclose(infile);
         throw;
     }
@@ -139,6 +141,8 @@ Flasher::verify(const char* filename)
     if (!infile)
         throw FileOpenError(errno);
 
+    std::cerr << "VERIFY" << std::endl;
+
     try
     {
         if (fseek(infile, 0, SEEK_END) != 0 ||
@@ -155,7 +159,7 @@ Flasher::verify(const char* filename)
         while ((fbytes = fread(bufferA, 1, pageSize, infile)) > 0)
         {
             // updated from one print per 10 pages to one per 10 percent
-            if (pageNum % (numPages/10) == 0)
+            if (!(numPages/10) || (pageNum % (numPages/10) == 0))
                 progressBar(pageNum, numPages);
 
             _flash->readPage((offset+pageNum), bufferB);
